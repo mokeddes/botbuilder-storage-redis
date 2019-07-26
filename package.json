@@ -1,55 +1,55 @@
 {
-    "name": "botbuilder-storage-redis",
-    "version": "1.0.0",
-    "description": "Redis storage for Microsoft BotBuilder V4",
-    "main": "lib/index.js",
-    "repository": {
-        "type": "git",
-        "url": "https://eu-de.git.cloud.ibm.com/GF/rs2022/botbuilder-storage-redis.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "concurrently -k -n \"Typescript, Node\" -p\"[{name}]\" -c \"blue, green\" \"tsc --watch\" \"nodemon lib/index.js\"",
-        "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-        "lint:fix": "npm run lint -- --fix",
-        "lint:commit:ci": "commitlint-travis",
-        "lint:md": "markdownlint -i node_modules ."
-    },
-    "keywords": [
-        "bot",
-        "node",
-        "botframework",
-        "botbuilder",
-        "redis",
-        "botkit"
-    ],
-    "author": "Anis MOKEDDES <mokeddes.anis@gmail.com>",
-    "license": "ISC",
-    "devDependencies": {
-        "@commitlint/cli": "^8.1.0",
-        "@commitlint/config-conventional": "^8.1.0",
-        "@types/jest": "^24.0.15",
-        "@types/node": "^12.6.8",
-        "@typescript-eslint/eslint-plugin": "^1.13.0",
-        "@typescript-eslint/parser": "^1.13.0",
-        "concurrently": "^4.1.1",
-        "eslint": "^6.1.0",
-        "eslint-config-airbnb-base": "^13.2.0",
-        "eslint-config-prettier": "^6.0.0",
-        "eslint-plugin-import": "^2.18.2",
-        "eslint-plugin-prettier": "^3.1.0",
-        "husky": "^3.0.1",
-        "jest": "^24.8.0",
-        "lint-staged": "^9.2.1",
-        "markdownlint-cli": "^0.17.0",
-        "nodemon": "^1.19.1",
-        "prettier": "^1.18.2",
-        "ts-jest": "^24.0.2",
-        "typescript": "^3.5.3"
-    },
-    "dependencies": {
-        "@types/redis": "^2.8.13",
-        "botbuilder": "^4.5.2",
-        "redis": "^2.8.0"
-    }
+  "name": "botbuilder-storage-redis",
+  "version": "1.0.0",
+  "description": "Redis storage for Microsoft BotBuilder V4",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://eu-de.git.cloud.ibm.com/GF/rs2022/botbuilder-storage-redis.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -k -n \"Typescript, Node\" -p\"[{name}]\" -c \"blue, green\" \"tsc --watch\" \"nodemon lib/index.js\"",
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:commit:ci": "commitlint-travis",
+    "lint:md": "markdownlint -i node_modules ."
+  },
+  "keywords": [
+    "bot",
+    "node",
+    "botframework",
+    "botbuilder",
+    "redis",
+    "botkit"
+  ],
+  "author": "Anis MOKEDDES <mokeddes.anis@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "concurrently": "^4.1.1",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^3.0.1",
+    "jest": "^24.8.0",
+    "lint-staged": "^9.2.1",
+    "markdownlint-cli": "^0.17.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@types/redis": "^2.8.13",
+    "botbuilder": "^4.5.2",
+    "redis": "^2.8.0"
+  }
 }
