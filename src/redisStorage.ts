@@ -32,10 +32,15 @@ export class RedisDbStorage implements Storage {
       return data;
     }
 
-    for await (const key of stateKeys) {
-      const result = await this.getAsyncFromRedis(key);
-      data[key] = JSON.parse(result || '{}');
-    }
+    await Promise.all(
+      stateKeys.map(
+        async (key: string): Promise<void> => {
+          const result = await this.getAsyncFromRedis(key);
+          data[key] = JSON.parse(result || '{}');
+          Promise.resolve();
+        }
+      )
+    );
 
     return Promise.resolve(data);
   }
@@ -45,11 +50,17 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    for await (const key of Object.keys(changes)) {
-      const state = changes[key];
-      this.setAsyncFromRedis(key, JSON.stringify(state));
-    }
-    return Promise.resolve();
+    await Promise.all(
+      Object.keys(changes).map(
+        async (key): Promise<void> => {
+          const state = changes[key];
+
+          await this.setAsyncFromRedis(key, JSON.stringify(state));
+
+          Promise.resolve();
+        }
+      )
+    );
   }
 
   public async delete(keys: string[]): Promise<void> {
@@ -57,9 +68,14 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    for await (const key of keys) {
-      this.delAsyncFromRedis(key);
-    }
-    return Promise.resolve();
+    await Promise.all(
+      keys.map(
+        async (key: string): Promise<void> => {
+          await this.delAsyncFromRedis(key);
+
+          Promise.resolve();
+        }
+      )
+    );
   }
 }
