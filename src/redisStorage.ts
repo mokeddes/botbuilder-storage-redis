@@ -31,10 +31,13 @@ export class RedisDbStorage implements Storage {
       return data;
     }
 
-    for await (const key of stateKeys) {
-      const result = await this.getAsyncFromRedis(key);
-      data[key] = JSON.parse(result || '{}');
-    }
+    const allKeysValuesFromRedis = Promise.all(
+      stateKeys.map((key: string): Promise<string> => this.getAsyncFromRedis(key))
+    );
+
+    stateKeys.forEach((key: string, index: number): void => {
+      data[key] = JSON.parse(allKeysValuesFromRedis[index] || '{}');
+    });
 
     return Promise.resolve(data);
   }
@@ -44,8 +47,8 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    const allKeys = await Promise.all(Object.keys(changes));
-    allKeys.forEach((key: string): void => {
+    const allKeysValuesFromRedis = await Promise.all(Object.keys(changes));
+    allKeysValuesFromRedis.forEach((key: string): void => {
       const state = changes[key];
       this.setAsyncFromRedis(key, JSON.stringify(state));
     });
