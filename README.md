@@ -12,7 +12,7 @@ It allows you to store bot state in Redis, so that you can scale out your bot, a
 ## Installation
 
 ```bash
-npm install botbuilder-storage-redis-v4
+npm i botbuilder-storage-redis
 ```
 
 ## Sample Usage
