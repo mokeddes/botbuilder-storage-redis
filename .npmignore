@@ -1,0 +1,11 @@
+src/
+tsconfig.json
+.json
+.prettierrc
+.eslintrc
+.prettierignore
+.prettierrc
+commitlint.config.js
+jest.config.js
+.huskyrc.js
+.lintstagedrc.js

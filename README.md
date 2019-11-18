@@ -4,8 +4,6 @@ This project provides a Redis storage mechanism for [Bot Framework-JS SDK V4.](h
 
 It allows you to store bot state in Redis, so that you can scale out your bot, and be more resilient to bot server failures.
 
-![Build Status](https://dev.azure.com/BotBuilderPackages/mongoDBStorage/_apis/build/status/Pull%20Request%20Build?branchName=master)
-
 ## Requirements
 
 - [NodeJS](https://nodejs.org/en/) 10.x is a requirement to install dependencies, build and run tests.
