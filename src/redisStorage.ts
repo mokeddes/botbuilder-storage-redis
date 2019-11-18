@@ -44,10 +44,12 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    for await (const key of Object.keys(changes)) {
+    const allKeys = await Promise.all(Object.keys(changes));
+    allKeys.forEach((key: string): void => {
       const state = changes[key];
       this.setAsyncFromRedis(key, JSON.stringify(state));
-    }
+    });
+
     return Promise.resolve();
   }
 
