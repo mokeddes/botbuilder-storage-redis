@@ -6,3 +6,4 @@ public/*
 generate-testset/+
 test/*
 package-lock.json
+lib/
