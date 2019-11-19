@@ -25,7 +25,7 @@ const { RedisDbStorage } = require('botbuilder-storage-redis');
 const builder = require('botbuilder')
 
 // Initialize redis client
-var redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
+const redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
 
 // Create new storage with redis client
 const storage = new RedisStorage(redisClient)
@@ -34,7 +34,7 @@ const connector = new builder.ChatConnector()
 const bot = new builder.UniversalBot(connector)
 
 // Configure bot to use the RedisStorage
-const.set('storage', storage)
+bot.set('storage', storage)
 ```
 
 ## Contact
