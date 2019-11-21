@@ -61,9 +61,8 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    for await (const key of keys) {
-      this.delAsyncFromRedis(key);
-    }
+    await Promise.all(keys.map((key: string): Promise<void> => this.delAsyncFromRedis(key)));
+
     return Promise.resolve();
   }
 }
