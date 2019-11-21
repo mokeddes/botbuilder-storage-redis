@@ -31,7 +31,7 @@ export class RedisDbStorage implements Storage {
       return data;
     }
 
-    const allKeysValuesFromRedis = Promise.all(
+    const allKeysValuesFromRedis = await Promise.all(
       stateKeys.map((key: string): Promise<string> => this.getAsyncFromRedis(key))
     );
 
