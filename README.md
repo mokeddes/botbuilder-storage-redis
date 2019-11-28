@@ -20,21 +20,18 @@ npm i botbuilder-storage-redis
 The storage depends on a redis client instance.
 
 ```JavaScript
-const redis = require('redis')
+const redis = require('redis');
 const { RedisDbStorage } = require('botbuilder-storage-redis');
-const builder = require('botbuilder')
+const builder = require('botbuilder');
 
-// Initialize redis client
 const redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
+const storage = new RedisDbStorage(redisClient);
 
-// Create new storage with redis client
-const storage = new RedisStorage(redisClient)
-
-const connector = new builder.ChatConnector()
-const bot = new builder.UniversalBot(connector)
+const connector = new builder.ChatConnector();
+const bot = new builder.UniversalBot(connector);
 
 // Configure bot to use the RedisStorage
-bot.set('storage', storage)
+bot.set('storage', storage);
 ```
 
 ## Contact
