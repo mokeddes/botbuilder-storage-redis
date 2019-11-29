@@ -36,7 +36,10 @@ export class RedisDbStorage implements Storage {
     );
 
     stateKeys.forEach((key: string, index: number): void => {
-      data[key] = JSON.parse(allKeysValuesFromRedis[index] || '{}');
+      const item = allKeysValuesFromRedis[index];
+      if (item) {
+        data[key] = JSON.parse(item);
+      };
     });
 
     return Promise.resolve(data);
