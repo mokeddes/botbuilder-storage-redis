@@ -14,7 +14,6 @@ export class RedisDbStorage implements Storage {
   private redis: RedisClient;
   private readonly ttlInSeconds: number;
   private readonly getAsyncFromRedis: (key: string) => Promise<string>;
-  private readonly setAsyncFromRedis: (key: string, value: string) => Promise<void>;
   private readonly setexAsyncFromRedis: (
     key: string,
     seconds: number,
@@ -29,7 +28,6 @@ export class RedisDbStorage implements Storage {
     this.ttlInSeconds = ttlInSeconds;
     this.redis = client;
     this.getAsyncFromRedis = promisify(client.get).bind(client);
-    this.setAsyncFromRedis = promisify(client.set).bind(client);
     this.setexAsyncFromRedis = promisify(client.setex).bind(client);
     this.delAsyncFromRedis = promisify(client.del).bind(client);
   }
@@ -66,10 +64,7 @@ export class RedisDbStorage implements Storage {
       allKeysValuesGivenToStore.map(
         (key: string): Promise<void> => {
           const state = changes[key];
-          if (this.ttlInSeconds > 0) {
-            return this.setexAsyncFromRedis(key, this.ttlInSeconds, JSON.stringify(state));
-          }
-          return this.setAsyncFromRedis(key, JSON.stringify(state));
+          return this.setexAsyncFromRedis(key, this.ttlInSeconds, JSON.stringify(state));
         }
       )
     );
