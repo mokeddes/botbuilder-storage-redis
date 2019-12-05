@@ -39,7 +39,7 @@ export class RedisDbStorage implements Storage {
       const item = allKeysValuesFromRedis[index];
       if (item) {
         data[key] = JSON.parse(item);
-      };
+      }
     });
 
     return Promise.resolve(data);
