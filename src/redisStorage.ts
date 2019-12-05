@@ -12,15 +12,25 @@ import { promisify } from 'util';
 
 export class RedisDbStorage implements Storage {
   private redis: RedisClient;
-  private ttlInSeconds: number;
-  private getAsyncFromRedis: (key: string) => Promise<string>;
-  private setAsyncFromRedis: (key: string, value: string) => Promise<void>;
-  private delAsyncFromRedis: (arg1: string) => Promise<void>;
+  private readonly ttlInSeconds: number;
+  private readonly getAsyncFromRedis: (key: string) => Promise<string>;
+  private readonly setAsyncFromRedis: (key: string, value: string) => Promise<void>;
+  private readonly setexAsyncFromRedis: (
+    key: string,
+    seconds: number,
+    value: string
+  ) => Promise<void>;
+  private readonly delAsyncFromRedis: (key: string) => Promise<void>;
 
-  constructor(client: RedisClient) {
+  constructor(client: RedisClient, ttlInSeconds: number = 0) {
+    if (ttlInSeconds < 0) {
+      throw new Error('RedisDbStorage: ttlInSeconds must be 0 or greater');
+    }
+    this.ttlInSeconds = ttlInSeconds;
     this.redis = client;
     this.getAsyncFromRedis = promisify(client.get).bind(client);
     this.setAsyncFromRedis = promisify(client.set).bind(client);
+    this.setexAsyncFromRedis = promisify(client.setex).bind(client);
     this.delAsyncFromRedis = promisify(client.del).bind(client);
   }
 
@@ -39,7 +49,7 @@ export class RedisDbStorage implements Storage {
       const item = allKeysValuesFromRedis[index];
       if (item) {
         data[key] = JSON.parse(item);
-      };
+      }
     });
 
     return Promise.resolve(data);
@@ -56,6 +66,9 @@ export class RedisDbStorage implements Storage {
       allKeysValuesGivenToStore.map(
         (key: string): Promise<void> => {
           const state = changes[key];
+          if (this.ttlInSeconds > 0) {
+            return this.setexAsyncFromRedis(key, this.ttlInSeconds, JSON.stringify(state));
+          }
           return this.setAsyncFromRedis(key, JSON.stringify(state));
         }
       )
