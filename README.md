@@ -41,6 +41,37 @@ const bot = new builder.UniversalBot(connector);
 bot.set('storage', storage);
 ```
 
+Similarly with [Botkit](https://github.com/howdyai/botkit):
+
+```JavaScript
+import redis from 'redis';
+import { RedisDbStorage } from 'botbuilder-storage-redis';
+
+// Redis config
+const redisOptions = {
+  prefix: 'bot-storage:',
+};
+
+const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL, redisOptions);
+const ttlInSeconds = 120;
+const redisStorage = new RedisDbStorage(redisClient, ttlInSeconds);
+
+// Botkit init
+const controller = new Botkit({
+  storage: redisStorage,
+  adapter: fbAdapter,
+  disable_console: false,
+  webhook_uri: '/bot/web-messages',
+  webserver_middlewares: [
+    (req: Request, res: Response, next: NextFunction) => {
+      console.info('Request >', req.url);
+      next();
+    },
+  ],
+});
+```
+
+
 ## Contact
 
 - Anis MOKEDDES <mokeddes.anis@gmail.com>
