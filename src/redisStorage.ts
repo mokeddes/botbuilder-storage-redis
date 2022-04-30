@@ -6,32 +6,27 @@
  *
  ********************************************************************************** */
 
-import { RedisClientType } from 'redis';
+import { RedisClientType, RedisDefaultModules, RedisModules, RedisScripts } from 'redis';
 
 import { Storage, StoreItems } from 'botbuilder';
-import { promisify } from 'util';
 
 export class RedisDbStorage implements Storage {
-  private redis: RedisClientType;
+  private redis: RedisClientType<RedisDefaultModules & RedisModules, RedisScripts>;
   private readonly ttlInSeconds: number;
-  private readonly getAsyncFromRedis: (key: string) => Promise<string>;
-  private readonly setexAsyncFromRedis: (
-    key: string,
-    seconds: number,
-    value: string
-  ) => Promise<void>;
-  private readonly delAsyncFromRedis: (key: string) => Promise<void>;
 
-  constructor(client: RedisClientType, ttlInSeconds: number = 0) {
-    if (ttlInSeconds < 0) {
+  constructor(
+    client: RedisClientType<RedisDefaultModules & RedisModules, RedisScripts>,
+    ttlInSeconds: number = 0
+  ) {
+    if (ttlInSeconds && ttlInSeconds < 0) {
       throw new Error('RedisDbStorage: ttlInSeconds must be 0 or greater');
     }
+    if (!client) {
+      throw new Error('RedisDbStorage: client must be provided');
+    }
+
     this.ttlInSeconds = ttlInSeconds;
     this.redis = client;
-    this.getAsyncFromRedis = promisify(client.get).bind(client);
-    this.setexAsyncFromRedis = promisify(client.set).bind(client);
-
-    this.delAsyncFromRedis = promisify(client.del).bind(client);
   }
 
   public async read(stateKeys: string[]): Promise<StoreItems> {
@@ -42,7 +37,7 @@ export class RedisDbStorage implements Storage {
     }
 
     const allKeysValuesFromRedis = await Promise.all(
-      stateKeys.map((key: string): Promise<string> => this.getAsyncFromRedis(key))
+      stateKeys.map((key: string): Promise<string> => this.redis.get(key))
     );
 
     stateKeys.forEach((key: string, index: number): void => {
@@ -52,7 +47,7 @@ export class RedisDbStorage implements Storage {
       }
     });
 
-    return Promise.resolve(data);
+    return data;
   }
 
   public async write(changes: StoreItems): Promise<void> {
@@ -63,13 +58,13 @@ export class RedisDbStorage implements Storage {
     const allKeysValuesGivenToStore = Object.keys(changes);
 
     await Promise.all(
-      allKeysValuesGivenToStore.map((key: string): Promise<void> => {
+      allKeysValuesGivenToStore.map((key: string): Promise<string> => {
         const state = changes[key];
-        return this.setexAsyncFromRedis(key, this.ttlInSeconds, JSON.stringify(state));
+        return this.redis.setEx(key, this.ttlInSeconds, JSON.stringify(state));
       })
     );
 
-    return Promise.resolve();
+    return;
   }
 
   public async delete(keys: string[]): Promise<void> {
@@ -77,8 +72,8 @@ export class RedisDbStorage implements Storage {
       return;
     }
 
-    await Promise.all(keys.map((key: string): Promise<void> => this.delAsyncFromRedis(key)));
+    await Promise.all(keys.map((key: string): Promise<number> => this.redis.del(key)));
 
-    return Promise.resolve();
+    return;
   }
 }

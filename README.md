@@ -5,6 +5,10 @@ This project provides a Redis storage mechanism for [Bot Framework-JS SDK V4.](h
 It allows you to store bot state in Redis, so that you can scale out your bot,
 and be more resilient to bot server failures.
 
+## Coverage
+
+100%
+
 ## Requirements
 
 - [NodeJS](https://nodejs.org/en/) 10.x is a requirement to install dependencies,
@@ -52,7 +56,12 @@ const redisOptions = {
   prefix: 'bot-storage:',
 };
 
-const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL, redisOptions);
+const redisClient = redis.createClient(
+    process.env.REDIS_PORT,
+    process.env.REDIS_URL,
+    redisOptions
+);
+
 const ttlInSeconds = 120;
 const redisStorage = new RedisDbStorage(redisClient, ttlInSeconds);
 
@@ -70,7 +79,6 @@ const controller = new Botkit({
   ],
 });
 ```
-
 
 ## Contact
 
