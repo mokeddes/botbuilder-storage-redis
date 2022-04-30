@@ -8,8 +8,7 @@
     "url": "https://github.com/mokeddes/botbuilder-storage-redis.git"
   },
   "scripts": {
-    "jest-test": "jest --watchAll",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "jest --watchAll",
     "dev": "concurrently -k -n \"Typescript, Node\" -p\"[{name}]\" -c \"blue, green\" \"tsc --watch\" \"nodemon lib/index.js\"",
     "lint": "tsc --noEmit && eslint \"**/*.{ts,tsx}\" --quiet --fix",
     "lint:fix": "npm run lint -- --fix",

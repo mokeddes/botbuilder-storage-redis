@@ -34,8 +34,15 @@ const redisOptions = {
     prefix: 'bot-storage:'
 };
 const redisClient = redis.createClient(process.env.REDIS_URL, redisOptions);
-// data expires in 2 hours after last update, set it to 0 for no limit.
-const ttlInSeconds = 120;
+/**
+ *  You can assign a life time for conversations. When enabling this feature,
+ *  conversations that take longer than the give TTL will be deleted automatically.
+ *  Be aware that future interactions with the bot after starting the conversation
+ *  won't change the TTL of the conversation.
+ *  Use this feature with caution.
+ */
+const ttlInSeconds = 10;
+
 const storage = new RedisDbStorage(redisClient, ttlInSeconds);
 
 const connector = new builder.ChatConnector();
@@ -62,7 +69,15 @@ const redisClient = redis.createClient(
     redisOptions
 );
 
-const ttlInSeconds = 120;
+/**
+ *  You can assign a life time for conversations. When enabling this feature,
+ *  conversations that take longer than the give TTL will be deleted automatically.
+ *  Be aware that future interactions with the bot after starting the conversation
+ *  won't change the TTL of the conversation.
+ *  Use this feature with caution.
+ */
+const ttlInSeconds = 10;
+
 const redisStorage = new RedisDbStorage(redisClient, ttlInSeconds);
 
 // Botkit init

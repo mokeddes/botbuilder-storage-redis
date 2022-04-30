@@ -60,7 +60,10 @@ export class RedisDbStorage implements Storage {
     await Promise.all(
       allKeysValuesGivenToStore.map((key: string): Promise<string> => {
         const state = changes[key];
-        return this.redis.setEx(key, this.ttlInSeconds, JSON.stringify(state));
+        if (this.ttlInSeconds > 0) {
+          return this.redis.setEx(key, this.ttlInSeconds, JSON.stringify(state));
+        }
+        return this.redis.set(key, JSON.stringify(state));
       })
     );
 

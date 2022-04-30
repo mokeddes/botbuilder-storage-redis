@@ -24,6 +24,13 @@ describe('RedisDbStorage without ttl', () => {
         }
       );
 
+    client.set = jest
+      .fn()
+      .mockImplementation(async (key: string, value: string): Promise<string> => {
+        store[key] = value;
+        return value;
+      });
+
     client.get = jest.fn().mockImplementation(async (key: string): Promise<string> => {
       return store[key];
     });
@@ -133,6 +140,13 @@ describe('RedisDbStorage with ttl', () => {
     store = {};
 
     storage = new RedisDbStorage(client);
+
+    client.set = jest
+      .fn()
+      .mockImplementation(async (key: string, value: string): Promise<string> => {
+        store[key] = value;
+        return value;
+      });
 
     client.setEx = jest
       .fn()
