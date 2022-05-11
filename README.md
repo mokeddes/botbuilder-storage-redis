@@ -11,7 +11,7 @@ and be more resilient to bot server failures.
 
 ## Requirements
 
-- [NodeJS](https://nodejs.org/en/) 14.x is a requirement to install dependencies,
+- [NodeJS](https://nodejs.org/en/) 12.x or greater is a requirement to install dependencies,
   build and run tests.
 - Redis database.
 
